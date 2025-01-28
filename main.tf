@@ -13,7 +13,7 @@ resource "docker_image" "nginx_image" {
 
 variable "volume_dir" {
   type    = string
-  default = "./terraform_hw"
+  default = "/tmp/terraform_hw"
 }
 
 resource "docker_container" "nginx_hello_world" {

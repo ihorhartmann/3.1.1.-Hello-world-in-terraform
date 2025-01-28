@@ -13,7 +13,7 @@ resource "docker_image" "nginx_image" {
 
 variable "volume_dir" {
   type    = string
-  default = "D:\\Programming\\DevOps\\3.1.1 terraform hw"
+  default = "3.1.1 terraform hw"
 }
 
 resource "docker_container" "nginx_hello_world" {

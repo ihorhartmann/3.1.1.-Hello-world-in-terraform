@@ -89,3 +89,24 @@ jobs:
     - name: Terraform Apply
 #      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve -input=false
+
+    # Wait for Docker container to start (optional, add delay if needed)
+    - name: Wait for container to be ready
+      run: |
+        echo "Waiting for Docker container to start..."
+        sleep 20 # or any other suitable time for the container to start
+
+    # Verify that Docker container is running
+    - name: Check Docker container status
+      run: docker ps
+
+    # Check if service is running via curl
+    - name: Verify service is accessible
+      run: |
+        curl -s --head --request GET http://localhost:8080 | grep "HTTP/1.1 200 OK"
+        if [ $? -eq 0 ]; then
+          echo "Service is up and running!"
+        else
+          echo "Service is not responding."
+          exit 1
+        fi

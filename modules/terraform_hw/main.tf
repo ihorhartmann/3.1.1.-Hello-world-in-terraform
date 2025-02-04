@@ -34,14 +34,14 @@ resource "null_resource" "create_volume_dir" {
 }
 
 resource "local_file" "index_html" {
-  filename = "${var.volume_dir}/html/index.html"
-  content  = "<html><body><h1>Hello, World!</h1></body></html>"
+  filename   = "${var.volume_dir}/html/index.html"
+  content    = "<html><body><h1>Hello, World!</h1></body></html>"
   depends_on = [null_resource.create_volume_dir]
 }
 
 resource "docker_container" "nginx_hello_world" {
-  name  = var.container_name
-  image = docker_image.nginx_image.name
+  name       = var.container_name
+  image      = docker_image.nginx_image.name
   depends_on = [local_file.index_html]
 
   ports {

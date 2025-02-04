@@ -1,29 +1,3 @@
-terraform {
-  required_version = ">= 1.10.5"
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "3.0.2"
-    }
-  }
-}
-
-variable "volume_dir" {
-  type = string
-}
-
-variable "container_name" {
-  type = string
-}
-
-variable "external_port" {
-  type = number
-}
-
-variable "internal_port" {
-  type = number
-}
-
 resource "docker_image" "nginx_image" {
   name = "nginx:latest"
 }

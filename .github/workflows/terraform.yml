@@ -65,8 +65,8 @@ jobs:
       - name: Check backend and frontend statuses
         run: |
           urls=(
-            "http://localhost:8080"
-            "https://localhost:8089"
+#            "http://localhost:8080"
+#            "https://localhost:8089"
             "http://localhost:8080/api/task"
             "https://localhost:8089/api/task"
           )

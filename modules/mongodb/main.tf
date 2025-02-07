@@ -14,6 +14,11 @@ resource "docker_container" "mongodb_container" {
     name = var.network_name
   }
 
+  ports {
+    internal = 27017
+    external = 27017
+  }
+
   volumes {
     container_path = "/data/db"
     host_path      = docker_volume.mongodb_volume.mountpoint

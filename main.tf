@@ -3,9 +3,8 @@ module "todo_app_network" {
 }
 
 module "backend" {
-  source                 = "./modules/backend"
-  network_name           = module.todo_app_network.network_name
-  mongodb_container_name = module.mongodb.mongodb_container_name
+  source       = "./modules/backend"
+  network_name = module.todo_app_network.network_name
 }
 
 module "frontend" {

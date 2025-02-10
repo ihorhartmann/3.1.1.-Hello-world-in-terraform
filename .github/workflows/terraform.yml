@@ -2,7 +2,7 @@ name: 'Terraform'
 
 on:
   pull_request:
-  
+
 concurrency:
   group: terraform-${{ github.ref }}
   cancel-in-progress: true
@@ -22,52 +22,62 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v4
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+      # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-    - name: Terraform Format Check
-      run: terraform fmt -recursive
+      - name: Terraform Format Check
+        run: terraform fmt -recursive
 
-    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
-    - name: Terraform Init
-      run: terraform init
+      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      - name: Terraform Init
+        run: terraform init
 
-    - name: Terraform Validate
-      run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate
 
-    - name: Install TFLint
-      run: |
-        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+      - name: Install TFLint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
-    - name: Run TFLint
-      run: tflint --init && tflint
+      - name: Run TFLint
+        run: tflint --init && tflint
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan
+      # Generates an execution plan for Terraform
+      - name: Terraform Plan
+        run: terraform plan
 
-    # On push to "main", build or change infrastructure according to Terraform configuration files
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false
+      # On push to "main", build or change infrastructure according to Terraform configuration files
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -input=false
 
-    # Verify that Docker container is running
-    - name: Check Docker container status
-      run: docker ps
+      # Verify that Docker container is running
+      - name: Check Docker containers statuses
+        run: docker ps
 
-    # Check if service is running via curl
-    - name: Check service status
-      run: |
-        curl -s --head --request GET http://localhost:8080 | grep "HTTP/1.1 200 OK"
-        if [ $? -eq 0 ]; then
-          echo "Service is up and running!"
-        else
-          echo "Service is not responding."
-          exit 1
-        fi
+      # Check if service is running via curl
+      - name: Check backend and frontend statuses
+        run: |
+          urls=(
+            "http://localhost:8080"
+            "https://localhost:8089"
+            "http://localhost:8080/api/task"
+            "https://localhost:8089/api/task"
+          )
+          
+          for url in "${urls[@]}"; do
+            echo "Checking $url..."
+            curl -L -k -s --head --request GET "$url" | grep "HTTP/1.1 200 OK"
+            if [ $? -eq 0 ]; then
+              echo "$url is up and running!"
+            else
+              echo "$url is not responding."
+              exit 1
+            fi
+          done

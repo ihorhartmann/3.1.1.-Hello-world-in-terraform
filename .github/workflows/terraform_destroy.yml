@@ -39,5 +39,9 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
+      # This step is added in order to avoid error with mongodb_volume absence, because Github doesn't store this resource
+      - name: Remove resource from Terraform state
+        run: terraform state rm module.mongodb.docker_volume.mongodb_volume
+
       - name: Terraform Destroy
         run: terraform destroy -auto-approve -input=false

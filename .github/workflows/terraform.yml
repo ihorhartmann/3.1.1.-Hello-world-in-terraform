@@ -36,8 +36,11 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -recursive
 
-      # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+      # Initialize Terraform and set up AWS vars
       - name: Terraform Init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform init
 
       - name: Terraform Validate
@@ -82,7 +85,3 @@ jobs:
               exit 1
             fi
           done
-
-      # Destroys created resources
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve -input=false

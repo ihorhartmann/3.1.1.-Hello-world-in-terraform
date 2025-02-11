@@ -2,7 +2,7 @@ name: 'Terraform'
 
 on:
   pull_request:
-  workflow_dispatch:
+#  workflow_dispatch:
 
 concurrency:
   group: terraform-${{ github.ref }}

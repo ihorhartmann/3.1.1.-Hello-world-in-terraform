@@ -1,5 +1,10 @@
 resource "docker_volume" "mongodb_volume" {
   name = "mongodb_volume"
+
+  lifecycle {
+    prevent_destroy = false
+    ignore_changes  = []
+  }
 }
 
 resource "docker_image" "mongodb_image" {

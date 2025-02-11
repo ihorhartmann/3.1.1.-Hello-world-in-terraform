@@ -1,4 +1,4 @@
-name: 'Terraform apply'
+name: 'Terraform'
 
 on:
   pull_request:
@@ -12,8 +12,8 @@ permissions:
   contents: read
 
 jobs:
-  terraform_apply:
-    name: 'Terraform apply'
+  terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
     environment: production
 

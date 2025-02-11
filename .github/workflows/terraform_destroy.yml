@@ -1,10 +1,10 @@
 name: 'Terraform destroy'
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - dev
-  workflow_dispatch:
 
 concurrency:
   group: terraform-${{ github.ref }}
